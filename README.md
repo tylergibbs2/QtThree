@@ -16,8 +16,6 @@ $ pip install -r requirements.txt
 $ python -m qtthree
 ```
 
-
-
 ## Project Design
 
 Please read below for all of my design decisions relating to the development of this project.
@@ -41,6 +39,22 @@ that can be easily modified to include the additional fields implemented by the 
 shape classes to be easily serialized without the duplication of code.
 
 For instance, a `Box` is an extension of the `AbstractShape` with `length`, `width`, and `height` fields added.
+
+### Serialization
+
+Serialization for shape properties hooks into the event handlers for the property field updates. Whenever a field
+is edited, the Serializer method is called. In order to prevent excessive file I/O, debouncing is implemented on
+the method to save a shape.
+
+For simplicity, I chose to store persistent data in JSON format. It would be just as feasible to use a SQL
+database to store shape data. Using a SQL database would very likely be more efficient and faster.
+
+### Custom Shapes
+
+Custom shapes can be loaded via STL files. These files are not stored by the application. For persistence, the location
+of the selected file is stored. Rather than Boxes and Spheres (which have attributes which can directly modify their
+meshes), it would be impossible to setup attributes like these for custom shapes. So, in order to modify custom shapes,
+users can modify the scale.
 
 ### Type-Hinting
 
